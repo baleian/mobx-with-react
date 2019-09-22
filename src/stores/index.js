@@ -1,10 +1,8 @@
-import CounterStore from './counter';
-import MarketStore from './market';
+import RefineDataStore from './refine-data';
 
 class RootStore {
   constructor() {
-    this.CounterStore = new CounterStore(this);
-    this.MarketStore = new MarketStore(this);
+    this.RefineDataStore = new RefineDataStore(this);
   }
 }
 
