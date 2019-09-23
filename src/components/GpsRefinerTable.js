@@ -1,20 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
-import { AgGridReact } from 'ag-grid-react';
+import DataTable from './DataTable';
 
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-
-const defaultColDef = {
-  sortable: true,
-  resizable: true,
-  editable: true,
-  resizable: true,
-  sortingOrder: ['asc', 'desc', null],
-};
-
-const columnDefs = [
+const columns = [
   { 
     field: 'id', 
     headerName: 'ID', 
@@ -76,49 +65,53 @@ const columnDefs = [
   },
 ];
 
-const gridOptions = {
-  defaultColDef,
-  columnDefs,
-  editType: 'fullRow',
-  multiSortKey: 'ctrl',
-  domLayout: 'autoHeight',
-  rowSelection: 'multiple',
-  singleClickEdit: true,
-  // suppressRowClickSelection: true,
-  stopEditingWhenGridLosesFocus: true,
-  sideBar: true,
-};
-
 @observer
 class DebugLine extends Component {
   render() {
     const { data } = this.props;
-    return <div>{data.id}, {data.merchant}, {data.store}, {data.address}, {data.latitude}, {data.longitude}</div>;
+    return <div>{JSON.stringify(data)}</div>;
   }
 }
 
 @inject('RefineDataStore')
 @observer
 class GpsRefinerTable extends Component {
-
   onGridReady = ({ api, columnApi }) => {
     this.gridApi = api;
     this.gridColumnApi = columnApi;
+    this.gridColumnApi.autoSizeColumns(columns.map(c => c.field));
+  };
+
+  handleDataLoad = () => {
+    const { loadFromFile } = this.props.RefineDataStore;
+    const that = this;
+    loadFromFile().then((datas) => {
+      that.gridApi.setRowData(datas);
+      that.gridColumnApi.autoSizeColumns(columns.map(c => c.field));
+    });
+  };
+
+  handleGetAddress = () => {
+    const { getGpsByAddressFromWeb } = this.props.RefineDataStore;
+    let nodes = this.gridApi.getSelectedNodes();
+    nodes.forEach(n => {
+      getGpsByAddressFromWeb(n.data)
+        .then(d => n.setData(d));
+    });
   };
 
   render() {
-    const { datas } = this.props.RefineDataStore;
-
+    const { datas, loadFromFile } = this.props.RefineDataStore;
     return (
       <div>
         <h1>GPS Refiner</h1>
-        <div className="ag-theme-balham" style={{height: '500px'}}>
-          <AgGridReact
-            {...gridOptions}
-            rowData={datas}
-            onGridReady={this.onGridReady}
-          />
-        </div>
+        <button onClick={this.handleDataLoad}>loadData</button>
+        <button onClick={this.handleGetAddress}>getGpsByAddressFromWeb</button>
+        <DataTable
+          columns={columns}
+          datas={[]}
+          onGridReady={this.onGridReady}
+        />
         { datas.map(data => <DebugLine key={data.id} data={data} />) }
       </div>
     );
