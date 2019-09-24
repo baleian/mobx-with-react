@@ -1,8 +1,8 @@
-import RefineDataStore from './refine-data';
+import DataStore from './data';
 
 class RootStore {
   constructor() {
-    this.RefineDataStore = new RefineDataStore(this);
+    this.DataStore = new DataStore(this);
   }
 }
 

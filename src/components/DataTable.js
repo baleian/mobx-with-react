@@ -26,14 +26,14 @@ const gridOptions = {
 @observer
 class DataTable extends Component {
   render() {
-    const { columns, datas, onGridReady } = this.props;
+    const { columns, rows, onGridReady } = this.props;
     return (
       <div className="DataTable">
         <div className="ag-theme-balham">
           <AgGridReact
             {...gridOptions}
             columnDefs={columns}
-            rowData={datas}
+            rowData={rows}
             onRowClicked={() => console.log('row clicked!!')}
             onGridReady={onGridReady}
           />

@@ -24,35 +24,20 @@ const columns = [
   { 
     field: 'address', 
     headerName: 'Address',
-    cellStyle: ({ value }) => {
-      return {
-        backgroundColor: value ? null : '#FF000088'
-      };
-    }
   },
   { 
     field: 'latitude', 
     headerName: 'Latitude', 
-    cellStyle: ({ value }) => {
-      return {
-        backgroundColor: Number(value) ? null : '#FF000088'
-      };
-    }
   },
   { 
     field: 'longitude', 
     headerName: 'Longitude', 
-    cellStyle: ({ value }) => {
-      return {
-        backgroundColor: Number(value) ? null : '#FF000088'
-      };
-    }
   },
 ];
 
 @inject('DataStore')
 @observer
-class GpsRefinerTable extends Component {
+class StoreRefinerTable extends Component {
   render() {
     const { rows } = this.props.DataStore;
     return (
@@ -66,4 +51,4 @@ class GpsRefinerTable extends Component {
   }
 }
 
-export default GpsRefinerTable;
+export default StoreRefinerTable;
