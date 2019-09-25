@@ -27,17 +27,16 @@ const gridOptions = {
 class DataTable extends Component {
   render() {
     const { columns, rows, onGridReady } = this.props;
+    console.log('render DataTable');
     return (
-      <div className="DataTable">
-        <div className="ag-theme-balham">
-          <AgGridReact
-            {...gridOptions}
-            columnDefs={columns}
-            rowData={rows}
-            onRowClicked={() => console.log('row clicked!!')}
-            onGridReady={onGridReady}
-          />
-        </div>
+      <div className="ag-theme-balham">
+        <AgGridReact
+          {...gridOptions}
+          columnDefs={columns}
+          rowData={rows}
+          onRowClicked={() => console.log('row clicked!!')}
+          onGridReady={onGridReady}
+        />
       </div>
     );
   }

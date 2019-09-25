@@ -1,53 +1,37 @@
 :root {
-  --header-height: 90px;
-  --sidebar-width: 200px;
-  --sidebar-buttons-height: 180px;
+  --app-header-height: 90px;
+  --app-sidebar-width: 240px;
+  --app-min-heignt: 400px;
 }
 
 .App {
   width: 100%;
   height: 100%;
+  min-height: var(--app-min-heignt);
 }
 
-.App .header {
-  position: fixed;
-  height: var(--header-height);
+.App .header-wrapper {
   width: 100%;
-  padding-left: 15px;
-  border-bottom: 1px inset;
+  height: var(--app-header-height);
+  border-bottom: 1px inset #00000033;
+  box-sizing: border-box;
+  position: relative;
   overflow: hidden;
 }
 
-.App .sidebar {
-  position: fixed;
-  height: 100%;
-  width: var(--sidebar-width);
-  margin-top: var(--header-height);
-  z-index: 1;
+.App .sidebar-wrapper {
+  width: var(--app-sidebar-width);
+  height: calc(100% - var(--app-header-height));
   border-right: 1px solid #00000033;
+  box-sizing: border-box;
+  float: left;
+  position: relative;
   overflow: hidden;
-}
-
-.App .sidebar .SideBarTabs {
-  width: 100%;
-  height: calc(100% - var(--sidebar-buttons-height));
-  border-bottom: 1px inset;
-}
-
-.App .sidebar .SideBarButtons {
-  width: 100%;
-  height: var(--sidebar-buttons-height);
 }
 
 .App .container-wrapper {
-  position: absolute;
-  width: calc(100% - var(--sidebar-width));
-  height: calc(100% - var(--header-height));
-  top: var(--header-height);
-  left: var(--sidebar-width);
-  overflow: auto;
-}
-
-.App .container-wrapper .container {
-  padding: 20px;
+  width: calc(100% - var(--app-sidebar-width));
+  height: calc(100% - var(--app-header-height));
+  position: relative;
+  overflow: hidden;
 }

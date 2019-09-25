@@ -1,7 +1,5 @@
 import { observable, action } from 'mobx';
 
-import * as CsvFileReader from '../utils/CsvFileReader';
-
 class DataStore {
   @observable rows = [];
 

@@ -32,7 +32,7 @@ const dummyData = [{
 }];
 
 export function read(config) {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     setTimeout(() => {
       resolve(dummyData);
     }, 500);

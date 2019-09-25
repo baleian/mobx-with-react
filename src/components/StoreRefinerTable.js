@@ -39,6 +39,7 @@ const columns = [
 @observer
 class StoreRefinerTable extends Component {
   render() {
+    console.log('render StoreRefinerTable');
     const { rows } = this.props.DataStore;
     return (
       <div>

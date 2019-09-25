@@ -54,14 +54,13 @@ const columns = [
 @observer
 class GpsRefinerTable extends Component {
   render() {
+    console.log('render GpsRefinerTable');
     const { rows } = this.props.DataStore;
     return (
-      <div>
-        <DataTable
-          columns={columns}
-          rows={rows}
-        />
-      </div>
+      <DataTable
+        columns={columns}
+        rows={rows}
+      />
     );
   }
 }
