@@ -6,7 +6,7 @@ class AddressRefinerContainer extends Component {
   render() {
     return (
       <div className="AddressRefinerContainer">
-        <h1>AddressRefinerContainer</h1>
+        <span>AddressRefinerContainer</span>
       </div>
     );
   }

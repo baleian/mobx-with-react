@@ -6,7 +6,9 @@ class Header extends Component {
   render() {
     return (
       <div className="Header">
-        <h1>Poi Store Refiner</h1>
+        <span className="title left-center">
+          Poi Store Refiner
+        </span>
       </div>
     );
   }

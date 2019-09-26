@@ -14,11 +14,12 @@ import * as CsvFileReader from '../utils/CsvFileReader';
 
 import './ImportModal.css';
 
-@inject('DataStore')
+@inject('DataTableStore')
 @observer
 class ImportModal extends Component {
   @observable config = {
-    header: true
+    header: true,
+    skipEmptyLines: true
   };
 
   @action
@@ -26,11 +27,13 @@ class ImportModal extends Component {
     this.config[name] = value;
   };
 
-  handleImport = () => {
+  handleImport = (event) => {
+    const files = event.target.files;
+    if (!files || !files[0]) return;
     const { onClose } = this.props;
-    const { setRows } = this.props.DataStore
-    CsvFileReader.read(this.config).then(rows => {
-      setRows(rows);
+    const { load } = this.props.DataTableStore
+    CsvFileReader.readFiles(files, this.config).then(rows => {
+      load(rows);
       onClose();
     });
   };
@@ -57,7 +60,10 @@ class ImportModal extends Component {
               }
             </FormGroup>
           </FormControl>
-          <Button className="button" variant="contained" color="primary" onClick={this.handleImport}>Import</Button>
+          <input id="import-modal-input-type-files" type="file" accept=".csv" onChange={this.handleImport} style={{display: 'none'}} multiple />
+          <label htmlFor="import-modal-input-type-files">
+            <Button className="button" variant="contained" color="primary" component="span">Import</Button>
+          </label>
         </div>
       </Modal>
     );

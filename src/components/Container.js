@@ -7,6 +7,7 @@ import GpsRefinerContainer from '../containers/GpsRefinerContainer';
 import StoreRefinerContainer from '../containers/StoreRefinerContainer';
 import AddressRefinerContainer from '../containers/AddressRefinerContainer';
 
+import './Container.css';
 
 @inject('TabStore')
 @observer
