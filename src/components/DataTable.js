@@ -7,6 +7,7 @@ import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import 'ag-grid-enterprise';
 import { toJS } from 'mobx';
 
+import './DataTable.css';
 
 const defaultGridOptions = {
   defaultColDef: {
@@ -113,7 +114,7 @@ class DataTable extends Component {
     const { columns, rows, gridOptions } = this.props;
     console.log('DataTable render');
     return (
-      <div className="ag-theme-balham" style={{width: '100%', height: '100%'}}>
+      <div className="DataTable ag-theme-balham" style={{width: '100%', height: '100%'}}>
         <AgGridReact
           columnDefs={columns}
           rowData={rows}

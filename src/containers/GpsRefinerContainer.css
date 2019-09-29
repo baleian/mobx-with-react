@@ -1,0 +1,8 @@
+.GpsRefinerContainer {
+  width: 100%;
+  height: 100%;
+}
+
+.GpsRefinerContainer .ag-cell.error {
+  background-color: #FF000055;
+}

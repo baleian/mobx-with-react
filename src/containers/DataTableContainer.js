@@ -32,6 +32,12 @@ class FunctionToolPannel extends Component {
     this.props.api.setColumnDefs(this.props.DataTableStore.columns);
   };
 
+  handleOnClickDeleteColumn = _ => {
+    const { deleteColumn } = this.props.DataTableStore;
+    deleteColumn(this.refDeleteColumn.value);
+    this.props.api.setColumnDefs(this.props.DataTableStore.columns);
+  };
+
   render() {
     console.log('FunctionToolPannel render');
     const { columns } = this.props.DataTableStore;
@@ -51,6 +57,15 @@ class FunctionToolPannel extends Component {
           </select>
           <input ref={ref => this.refRenameColumnAfter = ref} type="text" placeholder="Rename Column" />
           <button onClick={this.handleOnClickRenameColumn}>Rename</button>
+        </div>
+        <hr />
+        <div style={{paddingLeft: '20px', paddingRight: '20px'}}>
+          <select ref={ref => this.refDeleteColumn = ref}>
+            {
+              columns.map((c, i) => (<option key={i} value={c.field}>{c.headerName || c.field}</option>))
+            }
+          </select>
+          <button onClick={this.handleOnClickDeleteColumn}>Delete</button>
         </div>
         <hr />
       </>
@@ -74,7 +89,6 @@ const gridOptions = {
     ]
   },
 };
-
 
 @inject('DataTableStore')
 @observer
