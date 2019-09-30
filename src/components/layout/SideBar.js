@@ -3,7 +3,7 @@ import { observer, inject } from 'mobx-react';
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { ImportModalButton } from './ImportModal';
+import { ImportModalButton } from '../ImportModal';
 
 import './SideBar.css';
 

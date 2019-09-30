@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { computed } from 'mobx';
 
-import DataTableContainer from '../containers/DataTableContainer';
-import GpsRefinerContainer from '../containers/GpsRefinerContainer';
-import StoreRefinerContainer from '../containers/StoreRefinerContainer';
-import AddressRefinerContainer from '../containers/AddressRefinerContainer';
+import DataTableContainer from '../container/DataTableContainer';
+import GpsRefinerContainer from '../container/GpsRefinerContainer';
+import StoreRefinerContainer from '../container/StoreRefinerContainer';
+import AddressRefinerContainer from '../container/AddressRefinerContainer';
 
 import './Container.css';
 
