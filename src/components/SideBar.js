@@ -3,7 +3,7 @@ import { observer, inject } from 'mobx-react';
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { ImportModalButton } from '../ImportModal';
+import { ImportModalButton } from './ImportModal';
 
 import './SideBar.css';
 
@@ -24,9 +24,8 @@ class SideBarTabs extends Component {
           onChange={this.handleOnChangeTab}
       >
         <Tab label="Data Table" />
-        <Tab label="GPS 정제" />
-        <Tab label="Store 정제" />
-        <Tab label="Address 정제" />
+        <Tab label="Store Refiner" />
+        <Tab label="Debug" />
       </Tabs>
     );
   }

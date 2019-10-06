@@ -14,7 +14,7 @@ import * as CsvFileReader from '../utils/CsvFileReader';
 
 import './ImportModal.css';
 
-@inject('DataTableStore')
+@inject('DataStore')
 @observer
 class ImportModal extends Component {
   @observable config = {
@@ -31,9 +31,9 @@ class ImportModal extends Component {
     const files = event.target.files;
     if (!files || !files[0]) return;
     const { onClose } = this.props;
-    const { load } = this.props.DataTableStore
+    const { setRows } = this.props.DataStore
     CsvFileReader.readFiles(files, this.config).then(rows => {
-      load(rows);
+      setRows(rows);
       onClose();
     });
   };

@@ -9,6 +9,42 @@ import { toJS } from 'mobx';
 
 import './DataTable.css';
 
+function getDefaultContextMenuItems(params) {
+  if (!params.node) {
+    return [ 'export' ];
+  }
+  return [
+    {
+      name: params.node.isSelected() ? 'Unselect' : 'Select',
+      icon: '<span class="ag-icon ag-icon-tick"></span>',
+      action: () => {
+        params.node.setSelected(!params.node.isSelected());
+      }
+    },
+    {
+      name: 'Delete',
+      icon: '<span class="ag-icon ag-icon-cross"></span>',
+      action: () => {
+        if (window.confirm(`Delete?\n${JSON.stringify(params.node.data)}`)) {
+          params.context.DataStore.deleteRow(params.node.data);
+        }
+      }
+    },
+    {
+      name: 'Delete Selected Rows',
+      icon: '<span class="ag-icon ag-icon-cancel"></span>',
+      action: () => {
+        const rows = params.api.getSelectedRows();
+        if (rows.length > 0 && window.confirm(`Delete ${rows.length} rows?`)) {
+          params.context.DataStore.deleteRows(rows);
+        }
+      }
+    },
+    'separator',
+    'export',
+  ];
+}
+
 const defaultGridOptions = {
   defaultColDef: {
     sortable: true,
@@ -23,9 +59,12 @@ const defaultGridOptions = {
   suppressRowClickSelection: true,
   stopEditingWhenGridLosesFocus: true,
   enableRangeSelection: true,
+  deltaRowDataMode: true,
+  getRowNodeId: r => r['_id'],
   sideBar: {
     toolPanels: ['columns', 'filters']
   },
+  getContextMenuItems: getDefaultContextMenuItems,
   statusBar: {
     statusPanels: [
       { 
@@ -36,7 +75,22 @@ const defaultGridOptions = {
   },
 };
 
-@inject('DataTableStore')
+const idHeader = {
+  field: '_id', 
+  headerName: '',
+  headerCheckboxSelection: true,
+  headerCheckboxSelectionFilteredOnly: true,
+  checkboxSelection: true,
+  suppressMenu: true,
+  suppressToolPanel: true,
+  sortable: false,
+  editable: false,
+  filter: false,
+  lockPosition: true,
+};
+
+
+@inject('DataStore')
 @observer
 class DataTable extends Component {
   gridApi = null;
@@ -49,7 +103,7 @@ class DataTable extends Component {
   save = () => {
     if (!this.preventRedoBuffer) this.redos = [];
     this.preventRedoBuffer = false;
-    let { rows } = this.props.DataTableStore;
+    let { rows } = this.props.DataStore;
     if (rows.length === 0) return;
     rows = toJS(rows);
     this.history.push(rows);
@@ -62,7 +116,7 @@ class DataTable extends Component {
     if (this.history.length >= 2) {
       this.redos.push(this.history.pop());
       const rows = this.history.pop();
-      const { setRows } = this.props.DataTableStore;
+      const { setRows } = this.props.DataStore;
       this.preventRedoBuffer = true;
       setRows(rows);
       this.gridApi.refreshClientSideRowModel('filter');
@@ -72,23 +126,34 @@ class DataTable extends Component {
   redo = () => {
     if (this.redos.length > 0) {
       const rows = this.redos.pop();
-      const { setRows } = this.props.DataTableStore;
+      const { setRows } = this.props.DataStore;
       this.preventRedoBuffer = true;
       setRows(rows);
       this.gridApi.refreshClientSideRowModel('filter');
     }
   };
 
-  onGridReady = ({ api, columnApi }) => {
-    this.gridApi = api;
-    this.gridColumnApi = columnApi;
+  onGridReady = params => {
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
+    const { onGridReady } = this.props.gridOptions;
+    if (onGridReady) {
+      onGridReady(params);
+    }
   };
 
-  onRowDataChanged = () => {
+  onRowDataChanged = ({ columnApi }) => {
+    columnApi.autoSizeColumns(columnApi.getAllColumns().map(c => c.getColId()));
     this.save();
-  }
+  };
 
-  onCellValueChanged = ({ oldValue, newValue }) => {
+  onRowDataUpdated = ({ columnApi }) => {
+    columnApi.autoSizeColumns(columnApi.getAllColumns().map(c => c.getColId()));
+    this.save();
+  };
+
+  onCellValueChanged = params => {
+    const { oldValue, newValue } = params;
     if (oldValue !== undefined && oldValue !== newValue) {
       this.save();
     }
@@ -98,7 +163,8 @@ class DataTable extends Component {
     this.save();
   };
 
-  suppressKeyboardEvent = ({ event }) => {
+  suppressKeyboardEvent = params => {
+    const { event } = params;
     if (event.ctrlKey) {
       if (event.which === 90) {
         event.preventDefault();
@@ -112,21 +178,22 @@ class DataTable extends Component {
   };
 
   render() {
-    console.log('DataTable render');
-    const { columns, rows, gridOptions } = this.props;
+    const { columnDefs, rowData, gridOptions, DataStore } = this.props;
     return (
       <div className="DataTable ag-theme-balham" style={{width: '100%', height: '100%'}}>
         <AgGridReact
-          columnDefs={columns}
-          rowData={rows}
+          columnDefs={[ idHeader, ...columnDefs ]}
+          rowData={rowData}
           {...defaultGridOptions}
           {...gridOptions}
           onGridReady={this.onGridReady}
           onRowDataChanged={this.onRowDataChanged}
+          onRowDataUpdated={this.onRowDataUpdated}
           onCellValueChanged={this.onCellValueChanged}
           onPasteStart={this.onPasteStart}
           onPasteEnd={this.onPasteEnd}
           suppressKeyboardEvent={this.suppressKeyboardEvent}
+          context={{ DataStore }}
         />
       </div>
     );
@@ -134,4 +201,4 @@ class DataTable extends Component {
 }
 
 export default DataTable;
-export { defaultGridOptions };
+export { getDefaultContextMenuItems };

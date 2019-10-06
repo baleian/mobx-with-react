@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 
-import DataTable from '../../components/DataTable';
-
-import './DataTableContainer.css';
-
-@inject('DataTableStore')
+@inject('DataStore')
 @observer
 class FunctionToolPannel extends Component {
   constructor(props) {
@@ -21,26 +17,26 @@ class FunctionToolPannel extends Component {
   }
 
   handleOnClickNewColumn = _ => {
-    const { addColumn } = this.props.DataTableStore;
+    const { addColumn } = this.props.DataStore;
     addColumn(this.refNewColumnName.value);
-    this.props.api.setColumnDefs(this.props.DataTableStore.columns);
+    // this.props.api.setColumnDefs(this.props.DataStore.columns);
   };
 
   handleOnClickRenameColumn = _ => {
-    const { renameColumn } = this.props.DataTableStore;
+    const { renameColumn } = this.props.DataStore;
     renameColumn(this.refRenameColumnBefore.value, this.refRenameColumnAfter.value);
-    this.props.api.setColumnDefs(this.props.DataTableStore.columns);
+    this.props.api.setColumnDefs(this.props.DataStore.columns);
   };
 
   handleOnClickDeleteColumn = _ => {
-    const { deleteColumn } = this.props.DataTableStore;
+    const { deleteColumn } = this.props.DataStore;
     deleteColumn(this.refDeleteColumn.value);
-    this.props.api.setColumnDefs(this.props.DataTableStore.columns);
+    this.props.api.setColumnDefs(this.props.DataStore.columns);
   };
 
   render() {
     console.log('FunctionToolPannel render');
-    const { columns } = this.props.DataTableStore;
+    const { columns } = this.props.DataStore;
     return (
       <>
         <hr />
@@ -52,7 +48,7 @@ class FunctionToolPannel extends Component {
         <div style={{paddingLeft: '20px', paddingRight: '20px'}}>
           <select ref={ref => this.refRenameColumnBefore = ref}>
             {
-              columns.map((c, i) => (<option key={i} value={c.field}>{c.headerName || c.field}</option>))
+              columns.map((c, i) => (<option key={i} value={c}>{c}</option>))
             }
           </select>
           <input ref={ref => this.refRenameColumnAfter = ref} type="text" placeholder="Rename Column" />
@@ -62,7 +58,7 @@ class FunctionToolPannel extends Component {
         <div style={{paddingLeft: '20px', paddingRight: '20px'}}>
           <select ref={ref => this.refDeleteColumn = ref}>
             {
-              columns.map((c, i) => (<option key={i} value={c.field}>{c.headerName || c.field}</option>))
+              columns.map((c, i) => (<option key={i} value={c}>{c}</option>))
             }
           </select>
           <button onClick={this.handleOnClickDeleteColumn}>Delete</button>
@@ -73,39 +69,4 @@ class FunctionToolPannel extends Component {
   }
 }
 
-const gridOptions = {
-  icons: { 'aggregation': '<span class="ag-icon ag-icon-aggregation"></span>' },
-  frameworkComponents: { FunctionToolPannel },
-  sideBar: {
-    toolPanels: [
-      'columns', 'filters',
-      {
-        id: 'functions',
-        labelDefault: 'Functions',
-        labelKey: 'functions',
-        iconKey: 'aggregation',
-        toolPanel: "FunctionToolPannel"
-      }
-    ]
-  },
-};
-
-@inject('DataTableStore')
-@observer
-class DataTableContainer extends Component {
-  render() {
-    console.log('DataTableContainer render');
-    const { columns, rows } = this.props.DataTableStore;
-    return (
-      <div className="DataTableContainer">
-        <DataTable 
-          columns={columns} 
-          rows={rows}
-          gridOptions={gridOptions} 
-        />
-      </div>
-    );
-  }
-}
-
-export default DataTableContainer;
+export default FunctionToolPannel;

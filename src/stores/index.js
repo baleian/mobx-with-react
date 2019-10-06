@@ -1,9 +1,9 @@
-import DataTableStore from './DataTableStore';
+import DataStore from './DataStore';
 import TabStore from './TabStore';
 
 class RootStore {
   constructor() {
-    this.DataTableStore = new DataTableStore(this);
+    this.DataStore = new DataStore(this);
     this.TabStore = new TabStore(this);
   }
 }

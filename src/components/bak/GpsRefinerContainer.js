@@ -23,6 +23,9 @@ const columns = [
     field: 'id',
     headerName: 'id',
     editable: false,
+    headerCheckboxSelection: true,
+    headerCheckboxSelectionFilteredOnly: true,
+    checkboxSelection: true,
     cellRenderer: 'agGroupCellRenderer'
   },
   { 

@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { computed } from 'mobx';
 
-import DataTableContainer from '../container/DataTableContainer';
-import GpsRefinerContainer from '../container/GpsRefinerContainer';
-import StoreRefinerContainer from '../container/StoreRefinerContainer';
-import AddressRefinerContainer from '../container/AddressRefinerContainer';
+import DataTableContainer from './containers/datatable/DataTableContainer';
+import StoreRefinerContainer from './containers/store_refiner/StoreRefinerContainer';
+import DebugContainer from './containers/debug/DebugContainer';
 
 import './Container.css';
 
@@ -17,9 +16,8 @@ class Container extends Component {
     const { selectedTabIndex } = this.props.TabStore;
     switch (selectedTabIndex) {
       case 0: return <DataTableContainer />;
-      case 1: return <GpsRefinerContainer />;
-      case 2: return <StoreRefinerContainer />;
-      case 3: return <AddressRefinerContainer />;
+      case 1: return <StoreRefinerContainer />;
+      case 2: return <DebugContainer />;
       default: return null;
     }
   }

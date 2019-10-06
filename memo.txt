@@ -1,0 +1,30 @@
+1. Data Table
+- [완료] 전체 데이터 확인
+- [완료] 컬럼 편집 (CRUD)
+- [완료] 컬럼 순서 편집
+- [완료] 데이터 편집 (CRUD)
+
+2. Store Refining
+- merchant 컬럼 지정
+- store 컬럼 지정
+- address 컬럼 지정
+- storeId 부여 (API call)
+- brandId 검색, 매핑
+- merchant, store 일괄 분배 기능
+- address를 이용한 latitude, longitude 검색 (Web, DB)
+- merchant, latitude, longitude 로 Web 검색 (detail에서 Web 검색 결과와 비교)
+- address, latitude, longitude로 building code 매핑
+
+4. Duplicate Checking (internally)
+- GPS Cell Grouping (Dynamic Cell Size)
+- Kakao map view
+
+5. Duplicate checking (with DB)
+- GPS Cell Grouping with current data and db data
+- Master: Current Data
+- Sub group: DB Data (Dynamic Cell Size)
+- 데이터베이스 데이터 (CRUD)
+
+6. Upsert datas
+- 데이터 최종 확인
+- 데이터 반영
