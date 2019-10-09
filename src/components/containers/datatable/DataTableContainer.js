@@ -7,6 +7,7 @@ import './DataTableContainer.css';
 
 function getMainMenuItems(params) {
   const { columns, addColumn, renameColumn, deleteColumn } = params.context.DataStore;
+  const column = params.column.getColDef().field;
   return [
     {
       name: 'Add Column',
@@ -18,13 +19,12 @@ function getMainMenuItems(params) {
     {
       name: 'Rename Column',
       action: () => {
-        const before = params.column.getColDef().field;
-        const after = prompt(`Rename column ${before} to`);
+        const after = prompt(`Rename column ${column} to`);
         if (columns.indexOf(after) === -1) {
-          return renameColumn(before, after);
+          return renameColumn(column, after);
         }
         if (window.confirm(`${after} column is already exist.\nDo you really want to change the column name?`)) {
-          renameColumn(before, after);
+          renameColumn(column, after);
         }
       }
     },
@@ -37,11 +37,23 @@ function getMainMenuItems(params) {
     {
       name: 'Delete Column',
       action: () => {
-        const column = params.column.getColDef().field;
         deleteColumn(column);
       }
     },
-    'separator', 
+    'separator',
+    {
+      name: 'Rename Column to merchant',
+      action: () => renameColumn(column, 'merchant')
+    },
+    {
+      name: 'Rename Column to store',
+      action: () => renameColumn(column, 'store')
+    },
+    {
+      name: 'Rename Column to address',
+      action: () => renameColumn(column, 'address')
+    },
+    'separator',
     ...params.defaultItems
   ];
 };

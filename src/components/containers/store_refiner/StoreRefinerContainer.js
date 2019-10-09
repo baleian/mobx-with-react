@@ -28,7 +28,28 @@ const columnDefs = [
   { 
     field: 'longitude', headerName: 'longitude',
   },
+  { 
+    field: '_db_longitude', headerName: 'db_longitude',
+    editable: false,
+    cellStyle: { backgroundColor: '#00000022' },
+  },
+  { 
+    field: '_db_latitude', headerName: 'db_latitude',
+    editable: false,
+    cellStyle: { backgroundColor: '#00000022' },
+  },
+  { 
+    field: '_web_longitude', headerName: 'web_longitude',
+    editable: false,
+    cellStyle: { backgroundColor: '#00000022' },
+  },
+  { 
+    field: '_web_latitude', headerName: 'web_latitude',
+    editable: false,
+    cellStyle: { backgroundColor: '#00000022' },
+  },
 ];
+
 
 function getContextMenuItems(params) {
   const defaultMenuItems = getDefaultContextMenuItems(params);
@@ -47,7 +68,7 @@ function getContextMenuItems(params) {
           }
         },
         {
-          name: 'New storeId Selected Rows',
+          name: 'New storeId (Selected Rows)',
           action: () => {
 
           }
@@ -62,6 +83,7 @@ function getContextMenuItems(params) {
   }
   return [...menuItems, 'separator', ...defaultMenuItems];
 }
+
 
 @inject('DataStore')
 @observer

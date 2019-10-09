@@ -31,7 +31,7 @@ function getDefaultContextMenuItems(params) {
       }
     },
     {
-      name: 'Delete Selected Rows',
+      name: 'Delete (Selected Rows)',
       icon: '<span class="ag-icon ag-icon-cancel"></span>',
       action: () => {
         const rows = params.api.getSelectedRows();
@@ -87,14 +87,16 @@ const idHeader = {
   editable: false,
   filter: false,
   lockPosition: true,
+  pinned: 'left',
+  lockPinned: true,
+  width: 100,
+  maxWidth: 100,
 };
 
 
 @inject('DataStore')
 @observer
 class DataTable extends Component {
-  gridApi = null;
-  gridColumnApi = null;
   history = [];
   redos = [];
   preventRedoBuffer = false;
@@ -119,7 +121,6 @@ class DataTable extends Component {
       const { setRows } = this.props.DataStore;
       this.preventRedoBuffer = true;
       setRows(rows);
-      this.gridApi.refreshClientSideRowModel('filter');
     }
   };
 
@@ -129,26 +130,14 @@ class DataTable extends Component {
       const { setRows } = this.props.DataStore;
       this.preventRedoBuffer = true;
       setRows(rows);
-      this.gridApi.refreshClientSideRowModel('filter');
     }
   };
 
-  onGridReady = params => {
-    this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
-    const { onGridReady } = this.props.gridOptions;
-    if (onGridReady) {
-      onGridReady(params);
-    }
-  };
-
-  onRowDataChanged = ({ columnApi }) => {
-    columnApi.autoSizeColumns(columnApi.getAllColumns().map(c => c.getColId()));
+  onRowDataChanged = () => {
     this.save();
   };
 
-  onRowDataUpdated = ({ columnApi }) => {
-    columnApi.autoSizeColumns(columnApi.getAllColumns().map(c => c.getColId()));
+  onRowDataUpdated = () => {
     this.save();
   };
 
@@ -164,15 +153,38 @@ class DataTable extends Component {
   };
 
   suppressKeyboardEvent = params => {
-    const { event } = params;
+    const { event, api, columnApi } = params;
+    // Delete
+    if (event.which === 46) {
+      const updates = [];
+      api.getCellRanges().forEach(range => {
+        for (var i = range.startRow.rowIndex; i <= range.endRow.rowIndex; i++) {
+          const data = api.getModel().getRow(i).data;
+          range.columns.forEach(column => {
+            data[column.getColDef().field] = '';
+          });
+          updates.push(data);
+        }
+      });
+      api.updateRowData(updates);
+      return true;
+    }
+
     if (event.ctrlKey) {
+      // Ctrl + Z
       if (event.which === 90) {
-        event.preventDefault();
         if (event.shiftKey) { this.redo(); } else { this.undo(); }
+        return true;
       }
+      // Ctrl + Y
       if (event.which === 89) {
-        event.preventDefault();
         this.redo();
+        return true;
+      }
+      // Ctrl + Q
+      if (event.which === 81) {
+        columnApi.autoSizeColumns(columnApi.getAllColumns().map(c => c.getColId()));
+        return true;
       }
     }
   };
@@ -186,7 +198,6 @@ class DataTable extends Component {
           rowData={rowData}
           {...defaultGridOptions}
           {...gridOptions}
-          onGridReady={this.onGridReady}
           onRowDataChanged={this.onRowDataChanged}
           onRowDataUpdated={this.onRowDataUpdated}
           onCellValueChanged={this.onCellValueChanged}

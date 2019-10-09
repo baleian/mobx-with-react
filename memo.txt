@@ -3,11 +3,11 @@
 - [완료] 컬럼 편집 (CRUD)
 - [완료] 컬럼 순서 편집
 - [완료] 데이터 편집 (CRUD)
-
-2. Store Refining
 - merchant 컬럼 지정
 - store 컬럼 지정
 - address 컬럼 지정
+
+2. Store Refining
 - storeId 부여 (API call)
 - brandId 검색, 매핑
 - merchant, store 일괄 분배 기능
