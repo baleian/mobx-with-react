@@ -24,7 +24,6 @@ class SideBarTabs extends Component {
           onChange={this.handleOnChangeTab}
       >
         <Tab label="Data Table" />
-        <Tab label="Store Refiner" />
         <Tab label="Debug" />
       </Tabs>
     );

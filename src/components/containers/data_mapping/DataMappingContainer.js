@@ -2,8 +2,27 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
 import DataTable from '../../DataTable';
-import './DataTableContainer.css';
+import './DataMappingContainer.css';
 
+
+const columnDefs = [
+  { 
+    field: 'storeId', headerName: 'storeId',
+  },
+  { 
+    field: 'brandId', headerName: 'brandId',
+  },
+  { 
+    field: 'merchant', headerName: 'merchant',
+  },
+  { 
+    field: 'store', headerName: 'store',
+  },
+  { 
+    field: 'address', headerName: 'address',
+    filter: 'agTextColumnFilter'
+  }
+];
 
 function getMainMenuItems(params) {
   const { columns, addColumn, renameColumn, deleteColumn } = params.context.DataStore;
@@ -62,29 +81,11 @@ function getMainMenuItems(params) {
 @inject('DataStore')
 @observer
 class DataTableContainer extends Component {
-  gridApi = null;
-  gridColumnApi = null;
-
-  onGridReady = ({ api, columnApi }) => {
-    this.gridApi = api;
-    this.gridColumnApi = columnApi;
-  };
-
-  componentWillUnmount() {
-    const columnState = this.gridColumnApi.getColumnState();
-    const columns = this.gridColumnApi.getAllColumns().reduce((prev, curr) => {
-      prev[curr.getColId()] = curr.getColDef().field;
-      return prev;
-    }, {});
-    const columnNames = columnState.map(c => columns[c.colId]).filter(c => c !== '_');
-    this.props.DataStore.setColumnOrder(columnNames);
-  };
-
   render() {
     const { columns, rows } = this.props.DataStore;
     const columnDefs = columns.map(c => ({ field: c, headerName: c }));
     return (
-      <div className="DataTableContainer">
+      <div className="DataMappingContainer">
         <DataTable 
           columnDefs={columnDefs}
           rowData={rows}

@@ -1,16 +1,20 @@
+0. 기본 기능
+- 컬럼 편집 **[완료]**
+- 데이터 편집 **[완료]**
+- 데이터 선택 **[완료]**
+- 데이터 정렬 **[완료]**
+- 데이터 필터 **[완료]**
+- Redo, Undo **[완료]**
+- 기본 단축키 (복사/붙여넣기, 선택 데이터 삭제) **[완료]**
+
 1. Data Table
-- [완료] 전체 데이터 확인
-- [완료] 컬럼 편집 (CRUD)
-- [완료] 컬럼 순서 편집
-- [완료] 데이터 편집 (CRUD)
+- storeId 부여 (API call)
+- brandId 검색, 매핑
 - merchant 컬럼 지정
 - store 컬럼 지정
 - address 컬럼 지정
 
 2. Store Refining
-- storeId 부여 (API call)
-- brandId 검색, 매핑
-- merchant, store 일괄 분배 기능
 - address를 이용한 latitude, longitude 검색 (Web, DB)
 - merchant, latitude, longitude 로 Web 검색 (detail에서 Web 검색 결과와 비교)
 - address, latitude, longitude로 building code 매핑
